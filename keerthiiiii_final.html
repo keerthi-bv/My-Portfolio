@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+<title>Keerthi BV – Portfolio · Charcoal + Silver</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+  :root {
+    --bg: #050507; 
+    --surface: #0f0f0f;
+    --card: #141414;
+    --navy: #ffffff;
+    --teal: #e4e4e7;
+    --teal-light: #f0f0f5;
+    --rose: #f97316;
+    --gold: #fbbf24;
+    --sage: #d4d4d8;
+    --sky: #e2e8f0;
+    --sky2: #d1d5db;
+    --text: #ffffff;
+    --muted: #cbd5e6;
+    --border: rgba(255,255,255,0.12);
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+    --shadow-lg: 0 24px 60px rgba(0,0,0,0.6);
+    --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Interactive Mouse Spotlight */
+  #mouse-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(20, 184, 166, 0.05) 0%, rgba(99, 102, 241, 0.02) 30%, transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    transition: width 0.3s, height 0.3s;
+  }
+
+  /* SLOW MOTION ANIMATED BACKGROUND ORBS */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+    animation: floatOrb 20s infinite ease-in-out alternate;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: rgba(14, 165, 233, 0.12);
+    top: -10%; left: -10%;
+    animation-duration: 25s;
+  }
+  .orb-2 {
+    width: 600px; height: 600px;
+    background: rgba(139, 92, 246, 0.12);
+    bottom: -20%; right: -10%;
+    animation-duration: 32s;
+    animation-delay: -5s;
+  }
+  .orb-3 {
+    width: 400px; height: 400px;
+    background: rgba(20, 184, 166, 0.1);
+    top: 30%; left: 50%;
+    animation-duration: 28s;
+    animation-delay: -12s;
+  }
+
+  @keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(80px, 60px) scale(1.1) rotate(15deg); }
+    66% { transform: translate(-40px, 120px) scale(0.9) rotate(-10deg); }
+    100% { transform: translate(-80px, -40px) scale(1.05) rotate(5deg); }
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(255,255,255,0.02) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 10%, rgba(255,255,255,0.02) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 52px;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--sky);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  .nav-links a:hover { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
+  section { position: relative; z-index: 2; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 120px 52px 80px;
+  }
+  .hero-container {
+    max-width: 1200px;
+    display: flex; align-items: center;
+    gap: 80px; flex-wrap: wrap; justify-content: center;
+  }
+
+  /* Larger 3D Profile Card */
+  .profile-3d-wrap {
+    perspective: 1200px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .profile-3d-card {
+    width: 360px;
+    background: #111111;
+    border-radius: 32px;
+    padding: 40px 30px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    transform-style: preserve-3d;
+    border: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+    position: relative;
+    will-change: transform;
+  }
+  .profile-3d-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .profile-3d-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 10%; right: 10%; height: 30px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%);
+    filter: blur(10px);
+    z-index: -1;
+  }
+  
+  /* IMAGE CONTAINER */
+  .profile-avatar-box {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid var(--teal);
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.05), 0 15px 35px rgba(0,0,0,0.6);
+    margin: 0 auto 20px;
+    overflow: hidden;
+    transform: translateZ(60px); 
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: #1e1e1e;
+  }
+  .profile-avatar-box:hover {
+    box-shadow: 0 0 0 8px rgba(255,255,255,0.1), 0 20px 45px rgba(0,0,0,0.8);
+  }
+  .profile-avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-name-card {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 6px;
+    transform: translateZ(40px);
+  }
+  .profile-role-card {
+    font-size: 0.85rem;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    transform: translateZ(30px);
+  }
+  .profile-location {
+    font-size: 0.8rem;
+    color: #ffffff;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    transform: translateZ(20px);
+  }
+  .profile-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent);
+    margin: 18px 0;
+    opacity: 0.4;
+    transform: translateZ(10px);
+  }
+  .profile-stat-row {
+    display: flex; justify-content: space-around;
+    margin-top: 10px;
+    transform: translateZ(50px);
+    background: rgba(255,255,255,0.03);
+    padding: 15px 5px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .p-stat { text-align: center; }
+  
+  .p-stat-num { 
+    font-family: 'DM Mono', monospace; 
+    font-size: 1.6rem; 
+    font-weight: 900; 
+    color: #ffffff !important; 
+    text-shadow: 0 0 12px rgba(255,255,255,0.4);
+  }
+  .p-stat-label { 
+    font-size: 0.7rem; 
+    color: #ffffff !important; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    font-weight: 700; 
+  }
+
+  .hero-inner { flex: 1; max-width: 600px; }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--teal);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 30px;
+    margin-bottom: 22px;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  .hero-name .accent { color: var(--teal); }
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: #e2e8f0;
+    margin-bottom: 18px;
+    letter-spacing: 0.3px;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: #cbd5e6;
+    line-height: 1.75;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+  .hero-links { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 26px;
+    border-radius: 40px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.28s cubic-bezier(.23,1.15,.32,1);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary {
+    background: #ffffff;
+    color: #0a0a0a;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(255,255,255,0.3); background: #e4e4e7; }
+  .btn-teal {
+    background: var(--teal);
+    color: #0a0a0a;
+    box-shadow: 0 4px 18px rgba(228,228,231,0.2);
+  }
+  .btn-teal:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(255,255,255,0.3); background: #ffffff; }
+  .btn-outline {
+    background: transparent;
+    color: #ffffff;
+    border: 1.5px solid rgba(255,255,255,0.25);
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255,255,255,0.1); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 0;
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .stat {
+    text-align: center;
+    padding: 36px 48px;
+    flex: 1; min-width: 140px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    transition: background 0.3s;
+  }
+  .stat:hover { background: rgba(255,255,255,0.05); }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #ffffff !important;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+
+  /* SECTIONS */
+  .section-wrap { max-width: 1200px; margin: 0 auto; padding: 90px 52px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--teal);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ffffff;
+    margin-bottom: 52px;
+  }
+  .section-title span { color: var(--teal); }
+
+  /* ABOUT GRID (Adapted to Pruthvi's UI) */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .about-text { font-size: 1rem; color: #cbd5e6; line-height: 1.75; font-weight: 300; }
+  .about-text p { margin-bottom: 16px; }
+  .about-highlights { display: flex; flex-direction: column; gap: 16px; }
+  .highlight-card {
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 18px 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.35s cubic-bezier(.23,1.15,.32,1), border-color 0.3s;
+  }
+  .highlight-card:hover {
+    transform: translateX(8px);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .highlight-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .highlight-label { font-size: 0.68rem; font-family: 'DM Mono', monospace; color: var(--teal); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+  .highlight-value { font-size: 0.9rem; color: #ffffff; font-weight: 500; }
+
+  /* PROJECT TABS / GRID */
+  .tab-content.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  /* PROJECT CARDS */
+  .project-card {
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px;
+    transition: transform 0.35s cubic-bezier(.23,1.15,.32,1), box-shadow 0.35s, border-color 0.3s;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #e4e4e7, #a1a1aa);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .project-card:hover {
+    transform: translateY(-10px) scale(1.01);
+    box-shadow: 0 28px 56px rgba(0,0,0,0.6);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .project-card:hover::before { opacity: 1; }
+  
+  /* BRIGHTENED PROJECT TAGS */
+  .project-type {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 16px; font-weight: 700;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .type-office  { background: rgba(14, 165, 233, 0.25); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.5); }
+  .type-kotlin  { background: rgba(139, 92, 246, 0.25); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.5); }
+  .type-personal{ background: rgba(59, 130, 246, 0.25); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.5); }
+  .type-govt    { background: rgba(34, 197, 94, 0.25); color: #86efac; border: 1px solid rgba(134, 239, 172, 0.5); }
+  .type-free    { background: rgba(249, 115, 22, 0.25); color: #fdba74; border: 1px solid rgba(253, 186, 116, 0.5); }
+  
+  .project-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 10px; }
+  .project-desc { font-size: 0.83rem; color: #e2e8f0; line-height: 1.65; margin-bottom: 14px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .tag {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    padding: 3px 10px; border-radius: 20px;
+    background: rgba(255,255,255,0.07); color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+  }
+  .skill-group {
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 24px 22px;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(.23,1.15,.32,1);
+    position: relative; overflow: hidden;
+  }
+  .skill-group::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .skill-group:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 20px 48px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.25); }
+  .skill-group:hover::after { opacity: 1; }
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: #ffffff;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .skill-list { list-style: none; }
+  .skill-list li {
+    font-size: 0.83rem; color: #e2e8f0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-weight: 400;
+  }
+  .skill-list li:last-child { border-bottom: none; }
+
+  /* CERTIFICATES */
+  #certs { background: rgba(5,5,5,0.8); }
+  #certs .section-title { color: #ffffff; }
+  #certs .section-title span { color: var(--teal); }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .cert-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 24px 22px;
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: all 0.3s cubic-bezier(.23,1.15,.32,1);
+    position: relative; overflow: hidden;
+  }
+  .cert-card::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  }
+  .cert-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.25); }
+  .cert-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .cert-name { font-size: 0.9rem; font-weight: 600; color: #ffffff; margin-bottom: 4px; line-height: 1.3; }
+  .cert-issuer { font-size: 0.72rem; color: #cbd5e6; font-family: 'DM Mono', monospace; }
+  .cert-badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.6rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-item {
+    display: flex; gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    transition: transform 0.3s;
+  }
+  .timeline-item:hover { transform: translateX(10px); }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-left { width: 180px; flex-shrink: 0; }
+  .timeline-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: #ffffff;
+    letter-spacing: 0.5px; font-weight: 500; margin-bottom: 6px;
+  }
+  .timeline-company { font-size: 0.78rem; color: #cbd5e6; font-weight: 500; }
+  .timeline-right { flex: 1; }
+  .timeline-role { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
+  .timeline-points { list-style: none; }
+  .timeline-points li {
+    font-size: 0.83rem; color: #e2e8f0;
+    padding: 4px 0 4px 18px; position: relative; line-height: 1.6;
+  }
+  .timeline-points li::before { content: '›'; position: absolute; left: 0; color: #ffffff; font-size: 1rem; font-weight: 700; }
+
+  /* CONTACT */
+  #contact { background: linear-gradient(135deg, rgba(5,5,7,0.8) 0%, rgba(30,30,40,0.6) 100%); backdrop-filter: blur(10px); }
+
+  footer {
+    background: #030303;
+    color: #cbd5e6;
+    text-align: center;
+    padding: 28px;
+    font-size: 0.78rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+  footer a { color: #ffffff; text-decoration: none; transition: 0.2s; }
+  footer a:hover { color: var(--teal); text-decoration: underline; }
+
+  /* REVEAL ANIMATION */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 20px 60px; }
+    .hero-container { gap: 36px; }
+    .section-wrap { padding: 60px 24px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .stat { padding: 28px 20px; }
+    .timeline-item { flex-direction: column; gap: 8px; }
+    .timeline-item:hover { transform: none; }
+    .timeline-left { width: 100%; }
+    .profile-3d-card { width: 320px; padding: 35px 20px; }
+    .profile-avatar-box { width: 160px; height: 160px; }
+    #mouse-glow { display: none; } 
+    .bg-orb { display: none; } /* Hide orbs on mobile for performance */
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<div id="mouse-glow"></div>
+
+<nav>
+  <a class="nav-logo" href="#">Keerthi<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#pocs">POCs</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-container">
+
+    <div class="profile-3d-wrap reveal">
+      <div class="profile-3d-card" id="tilt-card">
+        
+        <div class="profile-avatar-box">
+          <img src="https://ui-avatars.com/api/?name=Keerthi+BV&background=1e1e1e&color=e4e4e7&size=200&font-size=0.4" alt="Keerthi BV">
+        </div>
+
+        <div class="profile-name-card">Keerthi BV</div>
+        <div class="profile-role-card">Tech Lead</div>
+        <div class="profile-location"><i class="fas fa-map-marker-alt" style="color:var(--teal);font-size:0.7rem"></i> Bangalore, India</div>
+        <div class="profile-divider"></div>
+        <div class="profile-stat-row">
+          <div class="p-stat"><div class="p-stat-num">9+</div><div class="p-stat-label">Years</div></div>
+          <div class="p-stat"><div class="p-stat-num">4+</div><div class="p-stat-label">Companies</div></div>
+          <div class="p-stat"><div class="p-stat-num">2</div><div class="p-stat-label">On-sites</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-tag reveal">// Available for new opportunities</div>
+      <h1 class="hero-name reveal">Keerthi <span class="accent">BV</span></h1>
+      <p class="hero-title reveal">Tech Lead · DevOps · RHEL · Security | Bangalore</p>
+      <p class="hero-desc reveal">Over 9 years of experience as a Development and Automation Engineer, extensively working on Red Hat Linux, DevOps pipelines, and security practices. Currently leading teams at Wipro Technologies.</p>
+      <div class="hero-links reveal">
+        <a class="btn btn-primary" href="mailto:keerthibv28@gmail.com">
+          <i class="far fa-envelope"></i> Email Me
+        </a>
+        <a class="btn btn-teal" href="tel:+918310306926">
+          <i class="fas fa-phone-alt"></i> Call
+        </a>
+        <a class="btn btn-outline" href="#experience">
+          <i class="fas fa-arrow-down"></i> View Work
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat reveal"><div class="stat-num" id="s0">9+</div><div class="stat-label">Years Experience</div></div>
+  <div class="stat reveal"><div class="stat-num" id="s1">3+</div><div class="stat-label">Major Migrations</div></div>
+  <div class="stat reveal"><div class="stat-num" id="s2">11</div><div class="stat-label">Months On-site</div></div>
+  <div class="stat reveal"><div class="stat-num" id="s3">7+</div><div class="stat-label">POCs Delivered</div></div>
+</div>
+
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-label reveal">// who I am</div>
+    <h2 class="section-title reveal">About <span>Me</span></h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a Tech Lead with over 9 years of hands-on experience in RHEL systems, DevOps automation, and hardware engineering. I've built and maintained critical infrastructure at Ericsson and Wipro, driving platform migrations, security hardening, and CI/CD pipeline automation.</p>
+        <p>I've worked on-site in Ireland for a combined 11 months across two projects, collaborating directly with customers on large-scale migration and performance management systems. I thrive in Agile environments working closely with product owners, scrum masters, and cross-functional teams.</p>
+        <p>Beyond engineering, I lead security initiatives including Threat Modelling, STRIDE, and Vulnerability Analysis — bringing a security-first mindset to every layer of development.</p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-card reveal">
+          <div class="highlight-icon">🏢</div>
+          <div>
+            <div class="highlight-label">Current Role</div>
+            <div class="highlight-value">Tech Lead – Wipro Technologies</div>
+          </div>
+        </div>
+        <div class="highlight-card reveal">
+          <div class="highlight-icon">🌍</div>
+          <div>
+            <div class="highlight-label">International Experience</div>
+            <div class="highlight-value">On-site Ireland – 11 months total</div>
+          </div>
+        </div>
+        <div class="highlight-card reveal">
+          <div class="highlight-icon">🛡️</div>
+          <div>
+            <div class="highlight-label">Security Focus</div>
+            <div class="highlight-value">STRIDE · Threat Modelling · Vulnerability Analysis</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-wrap">
+    <div class="section-label reveal">// career path</div>
+    <h2 class="section-title reveal">Experience & <span>Leadership</span></h2>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-period">Nov 2024 – Present</div>
+          <div class="timeline-company">Wipro Technologies · Bengaluru</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Tech Lead <span class="tag" style="margin-left:8px; background: rgba(255,255,255,0.07);">Current</span></div>
+          <ul class="timeline-points">
+            <li>Solution analysis for major Market Requirements on ENIQ product</li>
+            <li>Complete remote Syslog procedure analysis for hardware components</li>
+            <li>Hardware commissioning, BIOS & RAID configuration</li>
+            <li>Automated RHEL client installation through Kickstart procedure</li>
+            <li>Building and managing KGB Pipelines for code build & delivery</li>
+            <li>Integrated SonarQube-Jenkins-Gerrit for Automated Code Review</li>
+            <li>Lead team as Security Master for STRIDE Model & Threat Modelling</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-period">Jun 2021 – Nov 2024</div>
+          <div class="timeline-company">Ericsson – ENIQ · Bengaluru</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Tech Lead <span class="tag" style="margin-left:8px; background: rgba(249, 115, 22, 0.2); color:#fdba74; border-color:rgba(249, 115, 22, 0.5)">On-site Ireland · 7 months</span></div>
+          <ul class="timeline-points">
+            <li>Migrated ENIQ product platform from RHEL 7 to RHEL 8</li>
+            <li>Led initiative to introduce Secure Coding Process — streamlined legacy code into secured code</li>
+            <li>Hands-on in Static Analysis with SonarQube</li>
+            <li>Drove release-level Vulnerability Analysis across the team</li>
+            <li>Active participation in all Agile ceremonies</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-period">Apr 2018 – Jun 2021</div>
+          <div class="timeline-company">Ericsson – ENIQ · Bengaluru</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Senior Project Engineer <span class="tag" style="margin-left:8px; background: rgba(249, 115, 22, 0.2); color:#fdba74; border-color:rgba(249, 115, 22, 0.5)">On-site Ireland · 4 months</span></div>
+          <ul class="timeline-points">
+            <li>Migrated ENIQ performance management platform from Solaris to RHEL</li>
+            <li>Involved in complete design and development of the migration lifecycle</li>
+            <li>Implemented Zero Manual Efforts Strategy with Single Click Automation for node hardening</li>
+            <li>Managed LINUX OS, Storage (SAN, NAS, VNX, UNITY), NFS, LVM, TCP/UDP, DHCP, DNS</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-period">Nov 2015 – Apr 2018</div>
+          <div class="timeline-company">Ericsson – OSS · Bengaluru</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Project Engineer</div>
+          <ul class="timeline-points">
+            <li>Analysed customer requirements and developed enhancements in existing products</li>
+            <li>Configured, built and managed Jenkins pipelines</li>
+            <li>Collaborated with stakeholders across design, development and delivery</li>
+            <li>Experienced with GIT, Jenkins, and Agile ceremonies</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" style="background: rgba(255,255,255,0.02);">
+  <div class="section-wrap">
+    <div class="section-label reveal">// toolkit</div>
+    <h2 class="section-title reveal">Technical <span>Arsenal</span></h2>
+    <div class="skills-grid">
+      <div class="skill-group reveal"><div class="skill-group-title">🐧 Primary – OS & Hardware</div><ul class="skill-list"><li>RHEL 7, 8 & 9</li><li>HPE Blade & Rack Servers</li><li>iLO / OA Configuration</li><li>BIOS & RAID Configuration</li><li>Kickstart Automation</li></ul></div>
+      <div class="skill-group reveal"><div class="skill-group-title">⚙️ DevOps & CI/CD</div><ul class="skill-list"><li>Jenkins Pipelines</li><li>SonarQube</li><li>Gerrit Code Review</li><li>Git / Version Control</li><li>KGB Pipelines</li></ul></div>
+      <div class="skill-group reveal"><div class="skill-group-title">🛡️ Security</div><ul class="skill-list"><li>STRIDE Model</li><li>Threat Modelling</li><li>Vulnerability Analysis</li><li>Nessus / Tenable</li><li>Secure Code Review</li></ul></div>
+      <div class="skill-group reveal"><div class="skill-group-title">🖥️ Storage & Networking</div><ul class="skill-list"><li>SAN / NAS / VNX / UNITY</li><li>NFS, LVM</li><li>TCP, UDP, DHCP, DNS</li><li>SCP, SSH</li><li>Remote Syslog</li></ul></div>
+      <div class="skill-group reveal"><div class="skill-group-title">📜 Scripting & Automation</div><ul class="skill-list"><li>Shell Scripting</li><li>Robot Framework</li><li>Automated Mailer</li><li>Notification Automation</li><li>Node Hardening Scripts</li></ul></div>
+      <div class="skill-group reveal"><div class="skill-group-title">☁️ Cloud & Tools</div><ul class="skill-list"><li>AWS (Secondary)</li><li>JIRA / Confluence</li><li>Agile / Scrum</li><li>Solaris (Migration)</li><li>Static Analysis</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="pocs">
+  <div class="section-wrap">
+    <div class="section-label reveal">// proof of concepts</div>
+    <h2 class="section-title reveal">POCs & <span>Innovations</span></h2>
+
+    <div class="tab-content active">
+      <div class="project-card reveal">
+        <span class="project-type type-office">Security</span>
+        <h3 class="project-title">STRIDE Model</h3>
+        <p class="project-desc">Security threat modelling using the STRIDE framework to systematically identify and mitigate threats across software architecture.</p>
+        <div class="project-tags"><span class="tag">Security</span><span class="tag">Architecture</span></div>
+      </div>
+      <div class="project-card reveal">
+        <span class="project-type type-office">Security</span>
+        <h3 class="project-title">Vulnerability Handling</h3>
+        <p class="project-desc">End-to-end vulnerability analysis pipeline using Nessus/Tenable with release-level tracking and remediation workflows.</p>
+        <div class="project-tags"><span class="tag">Security</span><span class="tag">Nessus</span></div>
+      </div>
+      <div class="project-card reveal">
+        <span class="project-type type-kotlin">DevOps</span>
+        <h3 class="project-title">KGB Pipelines</h3>
+        <p class="project-desc">Automated CI/CD pipelines for code build and delivery, integrated with SonarQube and Gerrit for code quality gates.</p>
+        <div class="project-tags"><span class="tag">CI/CD</span><span class="tag">SonarQube</span></div>
+      </div>
+      <div class="project-card reveal">
+        <span class="project-type type-office">Security</span>
+        <h3 class="project-title">Threat Modelling</h3>
+        <p class="project-desc">Comprehensive threat modelling exercise for enterprise software, identifying attack surfaces and proposing mitigation strategies.</p>
+        <div class="project-tags"><span class="tag">Security</span></div>
+      </div>
+      <div class="project-card reveal">
+        <span class="project-type type-personal">Automation</span>
+        <h3 class="project-title">Automated Mailer</h3>
+        <p class="project-desc">Automated notification system for stakeholders triggered on test execution events and pipeline status changes via Jenkins.</p>
+        <div class="project-tags"><span class="tag">Automation</span><span class="tag">Jenkins</span></div>
+      </div>
+      <div class="project-card reveal">
+        <span class="project-type type-govt">Infrastructure</span>
+        <h3 class="project-title">RHEL 9 Certification</h3>
+        <p class="project-desc">Internal certification project covering RHEL 9 features, system administration, and enterprise Linux best practices.</p>
+        <div class="project-tags"><span class="tag">RHEL 9</span><span class="tag">Linux</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="section-wrap">
+    <div class="section-label reveal" style="color: rgba(228,228,231,0.8);">// credentials</div>
+    <h2 class="section-title reveal">Certifications &amp; <span>Achievements</span></h2>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">🐧</div>
+        <div class="cert-body">
+          <div class="cert-name">RHEL 9 Internal Certification</div>
+          <div class="cert-issuer">Red Hat Enterprise Linux · Systems</div>
+          <div class="cert-badge">Certified</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🔍</div>
+        <div class="cert-body">
+          <div class="cert-name">Vulnerability Handling</div>
+          <div class="cert-issuer">Security · Nessus / Tenable</div>
+          <div class="cert-badge">Practitioner</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🛡️</div>
+        <div class="cert-body">
+          <div class="cert-name">STRIDE & Threat Modelling</div>
+          <div class="cert-issuer">Application Security · Architecture</div>
+          <div class="cert-badge">Security Master</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">⚙️</div>
+        <div class="cert-body">
+          <div class="cert-name">KGB Pipelines</div>
+          <div class="cert-issuer">CI/CD · Jenkins · SonarQube · Gerrit</div>
+          <div class="cert-badge">Practitioner</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🚀</div>
+        <div class="cert-body">
+          <div class="cert-name">DevOps Practices</div>
+          <div class="cert-issuer">Automation · Pipelines · Agile</div>
+          <div class="cert-badge">Practitioner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-wrap" style="text-align: center;">
+    <div class="section-label reveal" style="display: inline-block;">// let's connect</div>
+    <h2 class="section-title reveal" style="text-align: center;">Collaborate & <span>Build</span></h2>
+    <p class="reveal" style="max-width: 560px; margin: 0 auto 40px; color: var(--sky); font-size: 1rem; line-height: 1.75;">Open for senior Tech Lead roles, DevOps consulting, or security engineering opportunities. 9+ years of building, migrating, and securing enterprise systems across Ericsson and Wipro.</p>
+    <div class="hero-links reveal" style="justify-content: center;">
+      <a class="btn btn-primary" href="mailto:keerthibv28@gmail.com"><i class="far fa-envelope"></i> keerthibv28@gmail.com</a>
+      <a class="btn btn-outline" href="tel:+918310306926"><i class="fas fa-phone-alt"></i> +91 83103 06926</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Keerthi BV · Tech Lead & DevOps Engineer · 9+ years of engineering excellence</p>
+</footer>
+
+<script>
+  // 1. Reveal Animation
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), (i % 6) * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+  // 2. Counter animation (Updated for Keerthi's stats)
+  const statsObserver = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting) return;
+    [['s0','9+'],['s1','3+'],['s2','11'],['s3','7+']].forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const targetNum = parseFloat(val);
+      const suffix = String(val).replace(/[\d.]/g,'');
+      let current = 0;
+      const step = targetNum / 30;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= targetNum) { el.textContent = val; clearInterval(timer); }
+        else { el.textContent = Math.floor(current) + suffix; }
+      }, 35);
+    });
+    statsObserver.disconnect();
+  }, { threshold: 0.5 });
+  const statsBar = document.querySelector('.stats-bar');
+  if (statsBar) statsObserver.observe(statsBar);
+
+  // 3. 3D Mouse Movement Tilt Logic
+  const card = document.getElementById('tilt-card');
+  const wrap = document.querySelector('.profile-3d-wrap');
+
+  if(wrap && card) {
+    wrap.addEventListener('mousemove', (e) => {
+      const rect = wrap.getBoundingClientRect();
+      const x = e.clientX - rect.left; 
+      const y = e.clientY - rect.top;  
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -15; 
+      const rotateY = ((x - centerX) / centerX) * 15;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      card.style.transition = "transform 0.5s ease";
+    });
+
+    wrap.addEventListener('mouseenter', () => {
+      card.style.transition = "none";
+    });
+  }
+
+  // 4. Interactive Mouse Spotlight Logic
+  const mouseGlow = document.getElementById('mouse-glow');
+  window.addEventListener('mousemove', (e) => {
+    if(window.innerWidth > 768) { // Only animate on desktop
+      requestAnimationFrame(() => {
+        mouseGlow.style.transform = `translate(${e.clientX - 400}px, ${e.clientY - 400}px)`;
+      });
+    }
+  });
+</script>
+</body>
+</html>
